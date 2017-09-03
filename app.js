@@ -6,9 +6,11 @@ var app     = express();
 
 var json = { title: "", director: "", script: "",rating: "", plot: ""}
 
-app.get('*', function(req, res){
+app.get('/:id', function(req, res){
 console.log("run")
-  var url = 'http://www.filmweb.pl/Gwiezdne.Wojny'
+var id = req.params.id;
+console.log(id)
+  var url = 'http://www.filmweb.pl/' + id;
   request(url, function(error, respond, body){
     if(!error) {
       var $ = cheerio.load(body);
