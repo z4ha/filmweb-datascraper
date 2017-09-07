@@ -6,6 +6,23 @@ var app     = express();
 
 var json = { title: "", director: "", script: "",rating: "", plot: ""}
 
+var domSelectors = {
+  title: '.filmTitle a',
+  director: 'div .filmInfo table tr td li[itemprop="director"]',
+  script: 'div .filmInfo table tr:contains("scenariusz:") td',
+  rating: "span[itemprop='ratingValue']",
+  plot: 'div .filmPlot'
+}
+
+function dataSelector(domSelector, jsonAtrybute){
+  $(domSelector).filter(function(){
+  var data = $(this);
+  jsonAtrybute = data.text();
+  json.jsonAtrybute = jsonAtrybute;
+  console.log(jsonAtrybute);
+  })
+}
+
 app.get('/:id', function(req, res){
 console.log("run")
 var id = req.params.id;
@@ -17,44 +34,19 @@ console.log(id)
       var title, director, script, rating;
 
       // title
-      $('.filmTitle a').filter(function(){
-        var data = $(this);
-        title = data.text()
-        json.title = title;
-        console.log(title)
-      })
+      dataSelector(domSelectors.title, title);
+
       // director
-      $('div .filmInfo table tr td li[itemprop="director"]').filter(function(){
-        data = $(this);
-        // console.log(data);
-        director = data.text()
-        json.director = director;
-        console.log(director)
-      })
+      dataSelector(domSelectors.director, director);
+
       // script
-      $('div .filmInfo table tr:contains("scenariusz:") td').filter(function(){
-        data = $(this);
-        // console.log(data);
-        script = data.text()
-        json.script = script;
-        console.log(script)
-      })
-      // 
-      $('div .filmPlot').filter(function(){
-        data = $(this);
-        // console.log(data);
-        plot = data.text()
-        json.plot = plot;
-        console.log(plot)
-      })
+      dataSelector(domSelectors.script, script);
+
+      // plot
+      dataSelector(domSelectors.plot, plot);
+
       // rate 
-      $("span[itemprop='ratingValue']").filter(function(){
-        data = $(this);
-        // console.log(data);
-        rating = data.text()
-        json.rating = rating;
-        console.log(rating)
-      })
+      dataSelector(domSelectors.script, script);
     }
     res.send(json);
   })
